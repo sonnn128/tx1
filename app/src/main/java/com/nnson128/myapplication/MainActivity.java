@@ -22,7 +22,7 @@ public class MainActivity extends AppCompatActivity {
 
     private EditText editTextProductId, editTextProductName, editTextProductPrice;
     private Spinner spinnerCategory;
-    private Button buttonAdd, buttonEdit, buttonStatistics;
+    private Button buttonAdd, buttonEdit, buttonDelete, buttonStatistics;
     private ListView listViewProducts;
     private List<Product> productList;
     private ProductAdapter adapter;
@@ -35,7 +35,11 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
+            
+            // Lấy dp sang pixel cho padding 16dp
+            int paddingPx = (int) (16 * getResources().getDisplayMetrics().density);
+            
+            v.setPadding(systemBars.left + paddingPx, systemBars.top + paddingPx, systemBars.right + paddingPx, systemBars.bottom + paddingPx);
             return insets;
         });
 
@@ -52,6 +56,7 @@ public class MainActivity extends AppCompatActivity {
         spinnerCategory = findViewById(R.id.spinnerCategory);
         buttonAdd = findViewById(R.id.buttonAdd);
         buttonEdit = findViewById(R.id.buttonEdit);
+        buttonDelete = findViewById(R.id.buttonDelete);
         buttonStatistics = findViewById(R.id.buttonStatistics);
         listViewProducts = findViewById(R.id.listViewProducts);
         
@@ -59,7 +64,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void setupSpinner() {
-        String[] categories = {"Điện tử", "Gia dụng", "Thức phẩm"};
+        String[] categories = {"-- Chọn loại sản phẩm --", "Điện tử", "Gia dụng", "Thức phẩm"};
         ArrayAdapter<String> spinnerAdapter = new ArrayAdapter<>(this, 
             android.R.layout.simple_spinner_item, categories);
         spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -79,7 +84,7 @@ public class MainActivity extends AppCompatActivity {
             editTextProductPrice.setText(String.valueOf(product.getPrice()));
             
             // Set spinner to the product's category
-            String[] categories = {"Điện tử", "Gia dụng", "Thức phẩm"};
+            String[] categories = {"-- Chọn loại sản phẩm --", "Điện tử", "Gia dụng", "Thức phẩm"};
             for (int i = 0; i < categories.length; i++) {
                 if (categories[i].equals(product.getCategory())) {
                     spinnerCategory.setSelection(i);
@@ -96,8 +101,37 @@ public class MainActivity extends AppCompatActivity {
         // Edit button
         buttonEdit.setOnClickListener(v -> editProduct());
         
+        // Delete button
+        buttonDelete.setOnClickListener(v -> deleteProduct());
+        
         // Statistics button
         buttonStatistics.setOnClickListener(v -> showStatistics());
+    }
+
+    private void deleteProduct() {
+        if (selectedPosition == -1) {
+            Toast.makeText(this, "Vui lòng chọn sản phẩm để xóa", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        new AlertDialog.Builder(this)
+                .setTitle("Xác nhận xóa")
+                .setMessage("Bạn có chắc chắn muốn xóa sản phẩm này không?")
+                .setPositiveButton("Xóa", (dialog, which) -> {
+                    productList.remove(selectedPosition);
+                    adapter.notifyDataSetChanged();
+                    
+                    // Reset input fields
+                    editTextProductId.setText("");
+                    editTextProductName.setText("");
+                    editTextProductPrice.setText("");
+                    spinnerCategory.setSelection(0);
+                    selectedPosition = -1;
+                    
+                    Toast.makeText(MainActivity.this, "Đã xóa sản phẩm", Toast.LENGTH_SHORT).show();
+                })
+                .setNegativeButton("Hủy", null)
+                .show();
     }
 
     private void addProduct() {
@@ -111,7 +145,7 @@ public class MainActivity extends AppCompatActivity {
             return;
         }
 
-        if (spinnerCategory.getSelectedItemPosition() < 0) {
+        if (spinnerCategory.getSelectedItemPosition() == 0) {
             Toast.makeText(this, "Vui lòng chọn loại sản phẩm", Toast.LENGTH_SHORT).show();
             return;
         }
@@ -144,7 +178,7 @@ public class MainActivity extends AppCompatActivity {
             return;
         }
 
-        if (spinnerCategory.getSelectedItemPosition() < 0) {
+        if (spinnerCategory.getSelectedItemPosition() == 0) {
             Toast.makeText(this, "Vui lòng chọn loại sản phẩm", Toast.LENGTH_SHORT).show();
             return;
         }

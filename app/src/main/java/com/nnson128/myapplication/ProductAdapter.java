@@ -25,12 +25,15 @@ public class ProductAdapter extends ArrayAdapter<Product> {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         if (convertView == null) {
-            convertView = LayoutInflater.from(context).inflate(android.R.layout.simple_list_item_1, parent, false);
+            convertView = LayoutInflater.from(context).inflate(R.layout.product_list_item, parent, false);
         }
 
         Product product = products.get(position);
-        TextView textView = convertView.findViewById(android.R.id.text1);
-        textView.setText(product.toString());
+        TextView tvName = convertView.findViewById(R.id.textViewProductName);
+        TextView tvDetails = convertView.findViewById(R.id.textViewProductDetails);
+
+        tvName.setText("Mã: " + product.getId());
+        tvDetails.setText("Tên: " + product.getName() + "\nGiá: " + product.getPrice() + " VNĐ\nLoại: " + product.getCategory());
 
         return convertView;
     }
