@@ -18,51 +18,27 @@
         android:gravity="center"
         android:layout_marginBottom="16dp" />
 
-    <!-- Product Code Input -->
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Mã sản phẩm" />
-
     <EditText
         android:id="@+id/editTextProductId"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Nhập mã sản phẩm"
+        android:hint="Mã sản phẩm"
         android:layout_marginBottom="12dp" />
-
-    <!-- Product Name Input -->
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Tên sản phẩm" />
 
     <EditText
         android:id="@+id/editTextProductName"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Nhập tên sản phẩm"
+        android:hint="Tên sản phẩm"
         android:layout_marginBottom="12dp" />
-
-    <!-- Product Price Input -->
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Đơn giá" />
 
     <EditText
         android:id="@+id/editTextProductPrice"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Nhập đơn giá"
+        android:hint="Đơn giá"
         android:inputType="number"
-        android:layout_marginBottom="12dp" />
-
-    <!-- Category Spinner -->
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Chọn loại sản phẩm" />
+        android:layout_marginBottom="16dp" />
 
     <Spinner
         android:id="@+id/spinnerCategory"

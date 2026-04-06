@@ -111,6 +111,11 @@ public class MainActivity extends AppCompatActivity {
             return;
         }
 
+        if (spinnerCategory.getSelectedItemPosition() < 0) {
+            Toast.makeText(this, "Vui lòng chọn loại sản phẩm", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
         try {
             long price = Long.parseLong(priceStr);
             Product product = new Product(id, name, price, category);
@@ -136,6 +141,11 @@ public class MainActivity extends AppCompatActivity {
 
         if (id.isEmpty() || name.isEmpty() || priceStr.isEmpty()) {
             Toast.makeText(this, "Vui lòng nhập đầy đủ thông tin", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        if (spinnerCategory.getSelectedItemPosition() < 0) {
+            Toast.makeText(this, "Vui lòng chọn loại sản phẩm", Toast.LENGTH_SHORT).show();
             return;
         }
 
