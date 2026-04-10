@@ -33,7 +33,7 @@ public class ProductAdapter extends ArrayAdapter<Product> {
         TextView tvDetails = convertView.findViewById(R.id.textViewProductDetails);
 
         tvName.setText("Mã: " + product.getId());
-        tvDetails.setText("Tên: " + product.getName() + "\nGiá: " + product.getPrice() + " VNĐ\nLoại: " + product.getCategory());
+        tvDetails.setText("Tên: " + product.getName() + "\nĐTB: " + product.getGpa() + "\nNgành học: " + product.getMajor());
 
         return convertView;
     }

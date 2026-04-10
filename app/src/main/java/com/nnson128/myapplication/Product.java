@@ -3,14 +3,14 @@ package com.nnson128.myapplication;
 public class Product {
     private String id;
     private String name;
-    private long price;
-    private String category;
+    private double gpa;
+    private String major;
 
-    public Product(String id, String name, long price, String category) {
+    public Product(String id, String name, double gpa, String major) {
         this.id = id;
         this.name = name;
-        this.price = price;
-        this.category = category;
+        this.gpa = gpa;
+        this.major = major;
     }
 
     public String getId() {
@@ -29,24 +29,24 @@ public class Product {
         this.name = name;
     }
 
-    public long getPrice() {
-        return price;
+    public double getGpa() {
+        return gpa;
     }
 
-    public void setPrice(long price) {
-        this.price = price;
+    public void setGpa(double gpa) {
+        this.gpa = gpa;
     }
 
-    public String getCategory() {
-        return category;
+    public String getMajor() {
+        return major;
     }
 
-    public void setCategory(String category) {
-        this.category = category;
+    public void setMajor(String major) {
+        this.major = major;
     }
 
     @Override
     public String toString() {
-        return "Mã: " + id + ", Tên: " + name + ", Giá: " + price + ", Loại: " + category;
+        return "Mã: " + id + ", Tên: " + name + ", ĐTB: " + gpa + ", Ngành học: " + major;
     }
 }

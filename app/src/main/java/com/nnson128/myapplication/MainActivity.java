@@ -80,12 +80,12 @@ public class MainActivity extends AppCompatActivity {
             Product product = productList.get(position);
             editTextProductId.setText(product.getId());
             editTextProductName.setText(product.getName());
-            editTextProductPrice.setText(String.valueOf(product.getPrice()));
+            editTextProductPrice.setText(String.valueOf(product.getGpa()));
             
             // Set spinner to the product's category
             String[] categories = {"-- Chọn ngành học --", "CNTT", "Kế toán", "Điện tử"};
             for (int i = 0; i < categories.length; i++) {
-                if (categories[i].equals(product.getCategory())) {
+                if (categories[i].equals(product.getMajor())) {
                     spinnerCategory.setSelection(i);
                     break;
                 }
@@ -121,14 +121,14 @@ public class MainActivity extends AppCompatActivity {
         }
 
         try {
-            long price = Long.parseLong(priceStr);
-            Product product = new Product(id, name, price, category);
+            double gpa = Double.parseDouble(priceStr);
+            Product product = new Product(id, name, gpa, category);
             productList.add(product);
             adapter.notifyDataSetChanged();
             clearFields();
-            Toast.makeText(this, "Thêm sản phẩm thành công", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Thêm sinh viên thành công", Toast.LENGTH_SHORT).show();
         } catch (NumberFormatException e) {
-            Toast.makeText(this, "Giá phải là số", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Điểm phải là số", Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -159,11 +159,11 @@ public class MainActivity extends AppCompatActivity {
         }
 
         int totalStudents = productList.size();
-        long maxScore = productList.get(0).getPrice();
+        double maxScore = productList.get(0).getGpa();
         
         for (Product product : productList) {
-            if (product.getPrice() > maxScore) {
-                maxScore = product.getPrice();
+            if (product.getGpa() > maxScore) {
+                maxScore = product.getGpa();
             }
         }
 
