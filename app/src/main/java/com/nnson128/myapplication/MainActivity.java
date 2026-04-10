@@ -22,7 +22,7 @@ public class MainActivity extends AppCompatActivity {
 
     private EditText editTextProductId, editTextProductName, editTextProductPrice;
     private Spinner spinnerCategory;
-    private Button buttonAdd, buttonEdit, buttonStatistics;
+    private Button buttonAdd, buttonDelete, buttonStatistics;
     private ListView listViewProducts;
     private List<Product> productList;
     private ProductAdapter adapter;
@@ -55,7 +55,7 @@ public class MainActivity extends AppCompatActivity {
         editTextProductPrice = findViewById(R.id.editTextProductPrice);
         spinnerCategory = findViewById(R.id.spinnerCategory);
         buttonAdd = findViewById(R.id.buttonAdd);
-        buttonEdit = findViewById(R.id.buttonEdit);
+        buttonDelete = findViewById(R.id.buttonDelete);
         buttonStatistics = findViewById(R.id.buttonStatistics);
         listViewProducts = findViewById(R.id.listViewProducts);
         
@@ -63,7 +63,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void setupSpinner() {
-        String[] categories = {"-- Chọn loại sản phẩm --", "Điện tử", "Gia dụng", "Thức phẩm"};
+        String[] categories = {"-- Chọn ngành học --", "CNTT", "Kế toán", "Điện tử"};
         ArrayAdapter<String> spinnerAdapter = new ArrayAdapter<>(this, 
             android.R.layout.simple_spinner_item, categories);
         spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -83,7 +83,7 @@ public class MainActivity extends AppCompatActivity {
             editTextProductPrice.setText(String.valueOf(product.getPrice()));
             
             // Set spinner to the product's category
-            String[] categories = {"-- Chọn loại sản phẩm --", "Điện tử", "Gia dụng", "Thức phẩm"};
+            String[] categories = {"-- Chọn ngành học --", "CNTT", "Kế toán", "Điện tử"};
             for (int i = 0; i < categories.length; i++) {
                 if (categories[i].equals(product.getCategory())) {
                     spinnerCategory.setSelection(i);
@@ -97,8 +97,8 @@ public class MainActivity extends AppCompatActivity {
         // Add button
         buttonAdd.setOnClickListener(v -> addProduct());
         
-        // Edit button
-        buttonEdit.setOnClickListener(v -> editProduct());
+        // Delete button
+        buttonDelete.setOnClickListener(v -> deleteProduct());
         
         // Statistics button
         buttonStatistics.setOnClickListener(v -> showStatistics());
@@ -116,7 +116,7 @@ public class MainActivity extends AppCompatActivity {
         }
 
         if (spinnerCategory.getSelectedItemPosition() == 0) {
-            Toast.makeText(this, "Vui lòng chọn loại sản phẩm", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Vui lòng chọn ngành học", Toast.LENGTH_SHORT).show();
             return;
         }
 
@@ -132,57 +132,46 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private void editProduct() {
+    private void deleteProduct() {
         if (selectedPosition == -1) {
-            Toast.makeText(this, "Vui lòng chọn sản phẩm để sửa", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Vui lòng chọn sinh viên để xóa", Toast.LENGTH_SHORT).show();
             return;
         }
 
-        String id = editTextProductId.getText().toString().trim();
-        String name = editTextProductName.getText().toString().trim();
-        String priceStr = editTextProductPrice.getText().toString().trim();
-        String category = spinnerCategory.getSelectedItem().toString();
-
-        if (id.isEmpty() || name.isEmpty() || priceStr.isEmpty()) {
-            Toast.makeText(this, "Vui lòng nhập đầy đủ thông tin", Toast.LENGTH_SHORT).show();
-            return;
-        }
-
-        if (spinnerCategory.getSelectedItemPosition() == 0) {
-            Toast.makeText(this, "Vui lòng chọn loại sản phẩm", Toast.LENGTH_SHORT).show();
-            return;
-        }
-
-        try {
-            long price = Long.parseLong(priceStr);
-            Product product = productList.get(selectedPosition);
-            product.setId(id);
-            product.setName(name);
-            product.setPrice(price);
-            product.setCategory(category);
-            
-            adapter.notifyDataSetChanged();
-            clearFields();
-            selectedPosition = -1;
-            Toast.makeText(this, "Cập nhật sản phẩm thành công", Toast.LENGTH_SHORT).show();
-        } catch (NumberFormatException e) {
-            Toast.makeText(this, "Giá phải là số", Toast.LENGTH_SHORT).show();
-        }
+        new AlertDialog.Builder(this)
+                .setTitle("Xác nhận xóa")
+                .setMessage("Bạn có chắc chắn muốn xóa sinh viên này không?")
+                .setPositiveButton("Có", (dialog, which) -> {
+                    productList.remove(selectedPosition);
+                    adapter.notifyDataSetChanged();
+                    clearFields();
+                    selectedPosition = -1;
+                    Toast.makeText(this, "Xóa sinh viên thành công", Toast.LENGTH_SHORT).show();
+                })
+                .setNegativeButton("Không", null)
+                .show();
     }
 
     private void showStatistics() {
-        int totalProducts = productList.size();
-        long totalPrice = 0;
-        
-        for (Product product : productList) {
-            totalPrice += product.getPrice();
+        if (productList.isEmpty()) {
+            Toast.makeText(this, "Danh sách rỗng", Toast.LENGTH_SHORT).show();
+            return;
         }
 
-        String message = "Tổng số sản phẩm: " + totalProducts + "\n" +
-                        "Tổng giá trị: " + totalPrice;
+        int totalStudents = productList.size();
+        long maxScore = productList.get(0).getPrice();
+        
+        for (Product product : productList) {
+            if (product.getPrice() > maxScore) {
+                maxScore = product.getPrice();
+            }
+        }
+
+        String message = "Tổng số sinh viên: " + totalStudents + "\n" +
+                        "Điểm trung bình lớn nhất: " + maxScore;
 
         new AlertDialog.Builder(this)
-                .setTitle("Thống kê")
+                .setTitle("Thông báo")
                 .setMessage(message)
                 .setPositiveButton("OK", (dialog, which) -> dialog.dismiss())
                 .show();
