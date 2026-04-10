@@ -22,7 +22,7 @@ public class MainActivity extends AppCompatActivity {
 
     private EditText editTextProductId, editTextProductName, editTextProductPrice;
     private Spinner spinnerCategory;
-    private Button buttonAdd, buttonEdit, buttonDelete, buttonStatistics;
+    private Button buttonAdd, buttonEdit, buttonStatistics;
     private ListView listViewProducts;
     private List<Product> productList;
     private ProductAdapter adapter;
@@ -56,7 +56,6 @@ public class MainActivity extends AppCompatActivity {
         spinnerCategory = findViewById(R.id.spinnerCategory);
         buttonAdd = findViewById(R.id.buttonAdd);
         buttonEdit = findViewById(R.id.buttonEdit);
-        buttonDelete = findViewById(R.id.buttonDelete);
         buttonStatistics = findViewById(R.id.buttonStatistics);
         listViewProducts = findViewById(R.id.listViewProducts);
         
@@ -101,37 +100,8 @@ public class MainActivity extends AppCompatActivity {
         // Edit button
         buttonEdit.setOnClickListener(v -> editProduct());
         
-        // Delete button
-        buttonDelete.setOnClickListener(v -> deleteProduct());
-        
         // Statistics button
         buttonStatistics.setOnClickListener(v -> showStatistics());
-    }
-
-    private void deleteProduct() {
-        if (selectedPosition == -1) {
-            Toast.makeText(this, "Vui lòng chọn sản phẩm để xóa", Toast.LENGTH_SHORT).show();
-            return;
-        }
-
-        new AlertDialog.Builder(this)
-                .setTitle("Xác nhận xóa")
-                .setMessage("Bạn có chắc chắn muốn xóa sản phẩm này không?")
-                .setPositiveButton("Xóa", (dialog, which) -> {
-                    productList.remove(selectedPosition);
-                    adapter.notifyDataSetChanged();
-                    
-                    // Reset input fields
-                    editTextProductId.setText("");
-                    editTextProductName.setText("");
-                    editTextProductPrice.setText("");
-                    spinnerCategory.setSelection(0);
-                    selectedPosition = -1;
-                    
-                    Toast.makeText(MainActivity.this, "Đã xóa sản phẩm", Toast.LENGTH_SHORT).show();
-                })
-                .setNegativeButton("Hủy", null)
-                .show();
     }
 
     private void addProduct() {
